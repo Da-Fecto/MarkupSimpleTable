@@ -91,6 +91,7 @@ class MarkupSimpleTable extends WireData implements Module {
 	/**
 	 * Data collect
 	 *
+	 * @prop array
 	 *
 	 */
 	private $sections = array();
@@ -108,10 +109,10 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * Add table column
 	 *
 	 * @throws WireException
-	 * @param string $tag
+	 * @param string $tag Required tag td|th
 	 * @param mixed $value HTML Column value
-	 * @param mixed $className string classname or Associative array key => value attributes
-	 * @param array $attributes Associative array key => value attributes
+	 * @param mixed $className Optional string classname or optional Associative array key => value attributes
+	 * @param array $attributes Optional associative array key => value attributes
 	 *
 	 */
 	public function addColumn($tag, $value = '', $className = '', $attributes = array()) {
@@ -213,8 +214,8 @@ class MarkupSimpleTable extends WireData implements Module {
 	public function render($className = '', $attributes = array()) {
 		if (is_array($className)) $attributes = $className;
 		if (is_string($className) && strlen($className)) $attributes['class'] = $className;
+		$attributes = $this->attributesToString($attributes);
 
-		// Check
 		if (count($this->sections['table'])) {
 			foreach($this->sections as $name => $unused) {
 				if ($name === 'table') continue;
@@ -227,27 +228,20 @@ class MarkupSimpleTable extends WireData implements Module {
 		$out = '';
 		foreach ($this->sections as $sectionName => $sectionData) {
 			if (!count($sectionData)) continue;
-
-
-			// Section attributes
-
-			$out .= "<" . $sectionName . $this->attributesToString($this->sectionAttributes[$sectionName]) . ">";
+			if ($sectionName !== 'table') $out .= "<" . $sectionName . $this->attributesToString($this->sectionAttributes[$sectionName]) . ">";
 			foreach ($sectionData as $row) {
 				$out .= "<tr" . $this->attributesToString($row['attr']) . ">";
 				foreach ($row['columns'] as $column) {
-					$out .=
-					"<" . $column['tag'] . $this->attributesToString($column['attr']) . ">" .
-						$column['value'] .
-					"</" . $column['tag'] . ">";
+					$tag = $column['tag'];
+					$value = $column['value'];
+					$attr = $this->attributesToString($column['attr']);
+					$out .= "<" . $tag . $attr . ">" . $value . "</" . $tag . ">";
 				}
 				$out .= "</tr>";
 			}
-			$out .= "</" . $sectionName . ">";
+			if ($sectionName !== 'table') $out .= "</" . $sectionName . ">";
 		}
 
-		return
-		"<table" . $this->attributesToString($attributes) . ">" .
-			$out .
-		"</table>";
+		return "<table" . $attributes . ">" . $out . "</table>";
 	}
 }
