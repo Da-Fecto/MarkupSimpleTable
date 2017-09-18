@@ -137,7 +137,7 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * Add table data
 	 *
 	 * @param string|int $value
-	 * @param mixed $className string or array (associative) attributes	 
+	 * @param mixed $className string or array (associative) attributes
 	 * @param array $attributes Associative array
 	 *
 	 */
@@ -149,7 +149,7 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * Add table header
 	 *
 	 * @param string|int $value
-	 * @param mixed $className string or array (associative) attributes	 
+	 * @param mixed $className string or array (associative) attributes
 	 * @param array $attributes Associative array
 	 *
 	 */
@@ -161,7 +161,7 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * Set current section & section attributes
 	 *
 	 * @param string $section (table|thead|tbody|tfoot)
-	 * @param mixed $className string or array (associative) attributes	 
+	 * @param mixed $className string or array (associative) attributes
 	 * @param array $attributes Associative array
 	 *
 	 */
@@ -176,12 +176,13 @@ class MarkupSimpleTable extends WireData implements Module {
 	/**
 	 * Add table row
 	 *
-	 * @param mixed $className string or array (associative) attributes	 
+	 * @param mixed $className string or array (associative) attributes
 	 * @param array $attributes Associative array
 	 *
 	 */
 	public function tr($className = '', $attributes = array()) {
 		if ($className) $attributes['class'] = $className;
+		if (is_array($className)) $attributes = $className;
 		$rowCount = count($this->sections[$this->currentSection]);
 
 		$this->indexes[$this->currentSection] = $rowCount;
@@ -194,7 +195,7 @@ class MarkupSimpleTable extends WireData implements Module {
 	/**
 	 * Attributes to string
 	 *
-	 * @param array $array 
+	 * @param array $array
 	 * @return string
 	 *
 	 */
@@ -216,7 +217,7 @@ class MarkupSimpleTable extends WireData implements Module {
 	 *
 	 * @param string $className Table class name
 	 * @param array $attributes Associative array key => value
-	 * @return string 
+	 * @return string
 	 *
 	 */
 	public function render($className = '', $attributes = array()) {
