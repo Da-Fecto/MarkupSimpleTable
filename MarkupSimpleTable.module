@@ -51,6 +51,8 @@ class MarkupSimpleTable extends WireData implements Module {
 	/**
 	 * Columns
 	 *
+	 * @prop array $tags
+	 *
 	 */
 	private $tags = array(
 		'td',
@@ -74,9 +76,7 @@ class MarkupSimpleTable extends WireData implements Module {
 	private $sectionAttributes = array();
 
 	/**
-	 * Table sections
-	 *
-	 * Row index for sections
+	 * Table sections row indexes
 	 *
 	 * @param array $indexes
 	 *
@@ -109,13 +109,14 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * Add table column
 	 *
 	 * @throws WireException
+	 *
 	 * @param string $tag Required tag td|th
 	 * @param mixed $value HTML Column value
 	 * @param mixed $className Optional string classname or optional Associative array key => value attributes
 	 * @param array $attributes Optional associative array key => value attributes
 	 *
 	 */
-	public function addColumn($tag, $value = '', $className = '', $attributes = array()) {
+	protected function addColumn($tag, $value = '', $className = '', $attributes = array()) {
 		if (!in_array($tag, $this->tags)) throw new WireException('Not a valid tag.');
 		if (is_array($className)) $attributes = $className;
 		if (is_string($className) && strlen($className)) $attributes['class'] = $className;
@@ -191,7 +192,7 @@ class MarkupSimpleTable extends WireData implements Module {
 	}
 
 	/**
-	 * Attributes to string (markup)
+	 * Attributes to string
 	 *
 	 * @param array $array 
 	 * @return string
