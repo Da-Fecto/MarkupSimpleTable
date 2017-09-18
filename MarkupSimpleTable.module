@@ -136,6 +136,7 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * Add table data
 	 *
 	 * @param string|int $value
+	 * @param mixed $className string or array (associative) attributes	 
 	 * @param array $attributes Associative array
 	 *
 	 */
@@ -147,6 +148,7 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * Add table header
 	 *
 	 * @param string|int $value
+	 * @param mixed $className string or array (associative) attributes	 
 	 * @param array $attributes Associative array
 	 *
 	 */
@@ -157,7 +159,9 @@ class MarkupSimpleTable extends WireData implements Module {
 	/**
 	 * Set current section & section attributes
 	 *
-	 * @param string section
+	 * @param string $section (table|thead|tbody|tfoot)
+	 * @param mixed $className string or array (associative) attributes	 
+	 * @param array $attributes Associative array
 	 *
 	 */
 	public function setSection($section = '', $className = '', $attributes = array()) {
@@ -169,9 +173,10 @@ class MarkupSimpleTable extends WireData implements Module {
 	}
 
 	/**
+	 * Add table row
 	 *
-	 * @param string $className Table row class name
-	 * @param array $attributes Associative array key => value
+	 * @param mixed $className string or array (associative) attributes	 
+	 * @param array $attributes Associative array
 	 *
 	 */
 	public function tr($className = '', $attributes = array()) {
@@ -188,6 +193,7 @@ class MarkupSimpleTable extends WireData implements Module {
 	/**
 	 * Attributes to string (markup)
 	 *
+	 * @param array $array 
 	 * @return string
 	 *
 	 */
@@ -205,10 +211,11 @@ class MarkupSimpleTable extends WireData implements Module {
 	/**
 	 * Render
 	 *
-	 * Render table with optional attributes for table tag
+	 * Renders table
 	 *
 	 * @param string $className Table class name
 	 * @param array $attributes Associative array key => value
+	 * @return string 
 	 *
 	 */
 	public function render($className = '', $attributes = array()) {
