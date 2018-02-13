@@ -18,26 +18,6 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * @return array
 	 *
 	 */
-	public static function getModuleInfo() {<?php namespace ProcessWire;
-
-/**
- * ProcessWire module for generating table markup
- *
- * This file is licensed under the MIT license
- * https://processwire.com/about/license/mit/
- *
- * ProcessWire 3.x, Copyright 2016 by Ryan Cramer
- * https://processwire.com
- *
- */
-class MarkupSimpleTable extends WireData implements Module {
-
-	/**
-	 * Module information
-	 *
-	 * @return array
-	 *
-	 */
 	public static function getModuleInfo() {
 		return array(
 			'title' => 'Markup Simple Table',
@@ -57,7 +37,6 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * @param array $array Array to test
 	 * @param boolean $throw Throws Exception when true
 	 * @return boolean
-	 *
 	 */
 	public static function isAssociativeArray(array $array, $throw = true) {
 		// Needs associative array
@@ -72,7 +51,6 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * Columns
 	 *
 	 * @prop array $tags
-	 *
 	 */
 	private $tags = array(
 		'td',
@@ -83,7 +61,6 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * Current section
 	 *
 	 * @prop string Section name
-	 *
 	 */
 	private $currentSection = 'table';
 
@@ -91,7 +68,6 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * Current section attribute
 	 *
 	 * @prop array $sectionAttributes
-	 *
 	 */
 	private $sectionAttributes = array();
 
@@ -99,7 +75,6 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * Table sections row indexes
 	 *
 	 * @param array $indexes
-	 *
 	 */
 	private $indexes = array(
 		'table' => 0,
@@ -112,13 +87,11 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * Data collect
 	 *
 	 * @prop array
-	 *
 	 */
 	private $sections = array();
 
 	/**
 	 * Initialize the module
-	 *
 	 */
 	public function init() {
 		foreach($this->indexes as $section => $unused) $this->sections[$section] = array();
@@ -134,7 +107,6 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * @param mixed $value HTML Column value
 	 * @param mixed $className Optional string classname or optional Associative array key => value attributes
 	 * @param array $attributes Optional associative array key => value attributes
-	 *
 	 */
 	protected function addColumn($tag, $value = '', $className = '', $attributes = array()) {
 		if (!in_array($tag, $this->tags)) throw new WireException('Not a valid tag.');
@@ -159,7 +131,6 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * @param string|int $value
 	 * @param mixed $className string or array (associative) attributes
 	 * @param array $attributes Associative array
-	 *
 	 */
 	public function td($value = '', $className = '', $attributes = array()) {
 		$this->addColumn('td', $value, $className, $attributes);
@@ -171,7 +142,6 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * @param string|int $value
 	 * @param mixed $className string or array (associative) attributes
 	 * @param array $attributes Associative array
-	 *
 	 */
 	public function th($value = '', $className = '', $attributes = array()) {
 		$this->addColumn('th', $value, $className, $attributes);
@@ -183,7 +153,6 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * @param string $section (table|thead|tbody|tfoot)
 	 * @param mixed $className string or array (associative) attributes
 	 * @param array $attributes Associative array
-	 *
 	 */
 	public function setSection($section = '', $className = '', $attributes = array()) {
 		if (!ctype_digit(strval($this->indexes[$section]))) throw new WireException('No valid section provided.');
@@ -198,7 +167,6 @@ class MarkupSimpleTable extends WireData implements Module {
 	 *
 	 * @param mixed $className string or array (associative) attributes
 	 * @param array $attributes Associative array
-	 *
 	 */
 	public function tr($className = '', $attributes = array()) {
 		if ($className) $attributes['class'] = $className;
@@ -217,7 +185,6 @@ class MarkupSimpleTable extends WireData implements Module {
 	 *
 	 * @param array $array
 	 * @return string
-	 *
 	 */
 	public function attributesToString($array) {
 		if (empty($array)) return '';
@@ -239,243 +206,6 @@ class MarkupSimpleTable extends WireData implements Module {
 	 * @param string $className Table class name
 	 * @param array $attributes Associative array key => value
 	 * @return string
-	 *
-	 */
-	public function render($className = '', $attributes = array()) {
-		if (is_array($className)) $attributes = $className;
-		if (is_string($className) && strlen($className)) $attributes['class'] = $className;
-		$attributes = $this->attributesToString($attributes);
-
-		if (count($this->sections['table'])) {
-			foreach($this->sections as $name => $unused) {
-				if ($name === 'table') continue;
-				unset($this->sections[$name]);
-			}
-		} else {
-			unset($this->sections['table']);
-		}
-
-		$out = '';
-		foreach ($this->sections as $sectionName => $sectionData) {
-			if (!count($sectionData)) continue;
-			if ($sectionName !== 'table') $out .= "<" . $sectionName . $this->attributesToString($this->sectionAttributes[$sectionName]) . ">";
-			foreach ($sectionData as $row) {
-				$out .= "<tr" . $this->attributesToString($row['attr']) . ">";
-				foreach ($row['columns'] as $column) {
-					$tag = $column['tag'];
-					$value = $column['value'];
-					$attr = $this->attributesToString($column['attr']);
-					$out .= "<" . $tag . $attr . ">" . $value . "</" . $tag . ">";
-				}
-				$out .= "</tr>";
-			}
-			if ($sectionName !== 'table') $out .= "</" . $sectionName . ">";
-		}
-
-		return "<table" . $attributes . ">" . $out . "</table>";
-	}
-}
-
-		return array(
-			'title' => 'Markup Simple Table',
-			'version' => '0.0.1',
-			'author' => 'Martijn Geerts',
-			'summary' => 'Simple table markup module.',
-			'singular' => false,
-			'autoload' => false,
-			'icon' => 'table',
-			);
-	}
-
-	/**
-	 * Is associative array?
-	 *
-	 * @throws WireException
-	 * @param array $array Array to test
-	 * @param boolean $throw Throws Exception when true
-	 * @return boolean
-	 *
-	 */
-	public static function isAssociativeArray(array $array, $throw = true) {
-		// Needs associative array
-		if (count($array) !== count(array_filter(array_keys($array), 'is_string'))) {
-			if ($throw) throw new WireException('$attributes should be an associative array.');
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Columns
-	 *
-	 * @prop array $tags
-	 *
-	 */
-	private $tags = array(
-		'td',
-		'th',
-		);
-
-	/**
-	 * Current section
-	 *
-	 * @prop string Section name
-	 *
-	 */
-	private $currentSection = 'table';
-
-	/**
-	 * Current section attribute
-	 *
-	 * @prop array $sectionAttributes
-	 *
-	 */
-	private $sectionAttributes = array();
-
-	/**
-	 * Table sections row indexes
-	 *
-	 * @param array $indexes
-	 *
-	 */
-	private $indexes = array(
-		'table' => 0,
-		'thead' => 0,
-		'tbody' => 0,
-		'tfoot' => 0,
-		);
-
-	/**
-	 * Data collect
-	 *
-	 * @prop array
-	 *
-	 */
-	private $sections = array();
-
-	/**
-	 * Initialize the module
-	 *
-	 */
-	public function init() {
-		foreach($this->indexes as $section => $unused) $this->sections[$section] = array();
-		$this->setSection('table');
-	}
-
-	/**
-	 * Add table column
-	 *
-	 * @throws WireException
-	 *
-	 * @param string $tag Required tag td|th
-	 * @param mixed $value HTML Column value
-	 * @param mixed $className Optional string classname or optional Associative array key => value attributes
-	 * @param array $attributes Optional associative array key => value attributes
-	 *
-	 */
-	protected function addColumn($tag, $value = '', $className = '', $attributes = array()) {
-		if (!in_array($tag, $this->tags)) throw new WireException('Not a valid tag.');
-		if (is_array($className)) $attributes = $className;
-		if (is_string($className) && strlen($className)) $attributes['class'] = $className;
-
-		// @note: Throws WireException
-		self::isAssociativeArray($attributes);
-
-		// Row index
-		$index = $this->indexes[$this->currentSection];
-		$this->sections[$this->currentSection][$index]['columns'][] = array(
-			'tag' => $tag,
-			'value' => strval($value),
-			'attr' => $attributes,
-		);
-	}
-
-	/**
-	 * Add table data
-	 *
-	 * @param string|int $value
-	 * @param mixed $className string or array (associative) attributes
-	 * @param array $attributes Associative array
-	 *
-	 */
-	public function td($value = '', $className = '', $attributes = array()) {
-		$this->addColumn('td', $value, $className, $attributes);
-	}
-
-	/**
-	 * Add table header
-	 *
-	 * @param string|int $value
-	 * @param mixed $className string or array (associative) attributes
-	 * @param array $attributes Associative array
-	 *
-	 */
-	public function th($value = '', $className = '', $attributes = array()) {
-		$this->addColumn('th', $value, $className, $attributes);
-	}
-
-	/**
-	 * Set current section & section attributes
-	 *
-	 * @param string $section (table|thead|tbody|tfoot)
-	 * @param mixed $className string or array (associative) attributes
-	 * @param array $attributes Associative array
-	 *
-	 */
-	public function setSection($section = '', $className = '', $attributes = array()) {
-		if (!ctype_digit(strval($this->indexes[$section]))) throw new WireException('No valid section provided.');
-		if (is_array($className)) $attributes = $className;
-		if (is_string($className) && strlen($className)) $attributes['class'] = $className;
-		$this->currentSection = $section;
-		$this->sectionAttributes[$section] = $attributes;
-	}
-
-	/**
-	 * Add table row
-	 *
-	 * @param mixed $className string or array (associative) attributes
-	 * @param array $attributes Associative array
-	 *
-	 */
-	public function tr($className = '', $attributes = array()) {
-		if ($className) $attributes['class'] = $className;
-		if (is_array($className)) $attributes = $className;
-		$rowCount = count($this->sections[$this->currentSection]);
-
-		$this->indexes[$this->currentSection] = $rowCount;
-		$this->sections[$this->currentSection][] = array(
-			'attr' => $attributes,
-			'columns' => array(),
-		);
-	}
-
-	/**
-	 * Attributes to string
-	 *
-	 * @param array $array
-	 * @return string
-	 *
-	 */
-	public function attributesToString($array) {
-		if (empty($array)) return '';
-
-		// @note: Throws WireException
-		self::isAssociativeArray($array);
-
-		return ' ' . implode(' ', array_map(function ($value, $key) {
-			return "$key='$value'";
-		}, array_values($array), array_keys($array)));
-	}
-
-	/**
-	 * Render
-	 *
-	 * Renders table
-	 *
-	 * @param string $className Table class name
-	 * @param array $attributes Associative array key => value
-	 * @return string
-	 *
 	 */
 	public function render($className = '', $attributes = array()) {
 		if (is_array($className)) $attributes = $className;
